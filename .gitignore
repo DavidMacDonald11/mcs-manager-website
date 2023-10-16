@@ -1,3 +1,6 @@
 # Air files
 .air.toml
 tmp
+
+# Db
+*.db
