@@ -1,16 +1,15 @@
-package db
+package data
 
 import (
 	"log"
 	"mcsm/env"
-	"mcsm/models"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-var Instance *gorm.DB
+var Db *gorm.DB
 
 func MustConnectToDb() {
     db, err := gorm.Open(sqlite.Open(env.DbPath()), &gorm.Config{})
@@ -28,7 +27,7 @@ func MustConnectToDb() {
     }
 
     log.Println("Running Migrations")
-    db.AutoMigrate(&models.User{})
+    db.AutoMigrate(&User{})
 
-    Instance = db
+    Db = db
 }

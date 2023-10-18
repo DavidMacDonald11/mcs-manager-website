@@ -1,10 +1,10 @@
-package models
+package data
 
 import "time"
 
 type User struct {
     ID uint `json:"id" gorm:"primaryKey"`
     CreatedAt time.Time
-    UserName string `json:"user_name"`
+    Username string `json:"username"`
     Password string `json:"password"`
 }

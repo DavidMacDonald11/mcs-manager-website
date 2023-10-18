@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{ template "tmpl/header" . }}
+    <body>
+        <div class="ui middle aligned center grid" style="height: 100vh;">
+            <div class="column">
+                <h2 class="ui image header">
+                    <div class="content">
+                        Login / Signup
+                    </div>
+                </h2>
+                <form class="ui large form" id="login-form">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="username" placeholder="Minecraft Username">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="ui fluid large green submit button" hx-post="/user/login" hx-target="#error-message">
+                        Login / Signup
+                    </div>
+                </form>
+                <div id="error-message"></div>
+            </div>
+        </div>
+    </body>
+</html>
