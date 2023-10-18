@@ -3,8 +3,8 @@ package data
 import "time"
 
 type User struct {
-    ID uint `json:"id" gorm:"primaryKey"`
+    ID uint64 `gorm:"primaryKey"`
+    Username string `gorm:"unique"`
+    Password string
     CreatedAt time.Time
-    Username string `json:"username"`
-    Password string `json:"password"`
 }
