@@ -1,0 +1,38 @@
+{{ block "login-form" . }}
+    <div class="ui middle aligned center grid" style="height: 100vh;">
+        <div class="column">
+            <h2 class="ui image header">
+                <div class="content">Login</div>
+            </h2>
+            <form
+                class="ui large form htmx-form"
+                hx-post="/user/auth/login"
+                hx-target="#auth-form"
+                hx-swap="innerHTML"
+                hx-trigger="submit">
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="username" placeholder="Minecraft Username" value="{{ .Username }}" autofocus>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                </div>
+                <input class="ui fluid large green submit button" type="submit" value="Login">
+            </form>
+            {{ if .Error }}
+                <div id="error-message">
+                    <div class="ui bottom attached error message">
+                        <i class="exclamation icon"></i>
+                        {{ .Error }}
+                    </div>
+                </div>
+            {{end }}
+        </div>
+    </div>
+{{ end }}

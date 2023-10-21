@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{ template "tmpl/header" . }}
+    <body id="auth-form">
+        {{ block "auth-form" . }}
+            <div class="ui middle aligned center grid" style="height: 100vh;">
+                <div class="column">
+                    <h2 class="ui image header">
+                        <div class="content">Enter Your Minecraft Username</div>
+                    </h2>
+                    <form
+                        class="ui large form htmx-form"
+                        hx-post="/user/auth/query"
+                        hx-target="#auth-form"
+                        hx-swap="innerHTML"
+                        hx-trigger="submit">
+
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="username" placeholder="Minecraft Username" value="{{ .Username }}" autofocus>
+                            </div>
+                        </div>
+                        <input class="ui fluid large green submit button" type="submit" value="Next">
+                    </form>
+                    {{ if .Error }}
+                        <div id="error-message">
+                            <div class="ui bottom attached error message">
+                                <i class="exclamation icon"></i>
+                                {{ .Error }}
+                            </div>
+                        </div>
+                    {{end }}
+                </div>
+            </div>
+        {{ end }}
+    {{ template "tmpl/footer" . }}
+    </body>
+</html>
