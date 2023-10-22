@@ -2,10 +2,10 @@
 <html lang="en">
     {{ template "tmpl/header" . }}
     <body>
-        <h1>Index</h1>
-        <form hx-post="/user/auth/logout" hx-trigger="submit">
-            <input class="ui button" type="submit" value="Logout">
-        </form>
+        <div class="ui menu">
+            <div class="header item">Minecraft Server Manager</div>
+            <div class="right item ui button" hx-post="/auth/logout">Logout</div>
+        </div>
     </body>
     {{ template "tmpl/footer" . }}
 </html>

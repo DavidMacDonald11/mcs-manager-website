@@ -11,11 +11,6 @@ import (
 	"github.com/gofiber/template/html/v2"
 )
 
-func setupRoutes(app *fiber.App) {
-    routes.SetupUserRoutes(app)
-    routes.SetupIndexRoutes(app)
-}
-
 func main() {
     data.MustConnectToDb()
 
@@ -30,7 +25,7 @@ func main() {
         AllowHeaders: "Content-Type, Origin, Accept",
     }))
 
-    setupRoutes(app)
+    routes.Setup(app)
 
     if !env.IsProd() {
         log.Println("WARNING: This is not a production client!")

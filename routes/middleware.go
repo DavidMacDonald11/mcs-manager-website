@@ -6,12 +6,23 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func HTMXRedirect(c *fiber.Ctx, route string) error {
+    hxReqHeader := c.GetReqHeaders()["Hx-Request"]
+
+    if len(hxReqHeader) > 0 && hxReqHeader[0] == "true" {
+        c.Set("Hx-Redirect", route)
+        return nil
+    }
+
+    return c.Redirect(route)
+}
+
 func LoggedIn(c *fiber.Ctx) error {
     authPaths := []string {
-        "/user/auth",
-        "/user/auth/query",
-        "/user/auth/login",
-        "/user/auth/signup",
+        "/auth",
+        "/auth/query",
+        "/auth/login",
+        "/auth/signup",
     }
 
     sess, err := data.Store.Get(c)
@@ -25,5 +36,5 @@ func LoggedIn(c *fiber.Ctx) error {
     }
 
     if loggedIn { return c.Next() }
-    return HTMXRedirect(c, "/user/auth")
+    return HTMXRedirect(c, "/auth")
 }
