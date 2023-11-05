@@ -49,10 +49,24 @@ func FindUser(username string) *User {
     return user
 }
 
+func FindUserByID(id uint64) *User {
+    user := new(User)
+    Db.First(user, id)
+
+    if user.ID == 0 { return nil }
+    return user
+}
+
 func CreateUser(username string, hash string) *User {
     user := &User{Username: username, Hash: hash}
     Db.Create(user)
 
     if user.ID == 0 { return nil }
     return user
+}
+
+func FindAllUsers() []User {
+    users := new([]User)
+    Db.Find(users)
+    return *users
 }

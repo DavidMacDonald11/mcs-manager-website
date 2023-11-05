@@ -6,6 +6,7 @@ import (
 
 func Setup(app *fiber.App) {
     setupAuth(app)
+    setupAdmin(app)
     app.Get("/", getRoot)
     app.Get("*", getOther)
 }

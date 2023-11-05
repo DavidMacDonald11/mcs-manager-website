@@ -4,6 +4,7 @@ import (
 	"mcsm/env"
 	"time"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/storage/sqlite3"
 )
@@ -19,3 +20,16 @@ var (
     AUTH_KEY = "authenticated"
     USER_ID = "user_id"
 )
+
+func GetUserSession(c *fiber.Ctx) (*session.Session, *User) {
+    sess, err := Store.Get(c)
+
+    if err != nil {
+        return sess, nil
+    }
+
+    id := sess.Get(USER_ID).(uint64)
+    user := FindUserByID(id)
+
+    return sess, user
+}

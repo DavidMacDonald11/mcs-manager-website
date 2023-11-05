@@ -1,6 +1,9 @@
 package env
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 func IsProd() bool {
     return os.Getenv("GOENV_PROD") == "true"
@@ -14,4 +17,15 @@ func Port() string {
 func DbPath() string {
     if !IsProd() { return "mcsm.db" }
     return os.Getenv("DB_PATH")
+}
+
+func Admins() []string {
+    if !IsProd() { return []string{"The13Doctors"} }
+    res := strings.Split(os.Getenv("ADMINS"), ",")
+
+    for i, s := range res {
+        res[i] = strings.Trim(s, " ")
+    }
+
+    return res
 }

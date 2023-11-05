@@ -2,6 +2,9 @@ package routes
 
 import (
 	"mcsm/data"
+	"mcsm/env"
+	"slices"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -17,7 +20,7 @@ func HTMXRedirect(c *fiber.Ctx, route string) error {
     return c.Redirect(route)
 }
 
-func LoggedIn(c *fiber.Ctx) error {
+func IsLoggedIn(c *fiber.Ctx) error {
     authPaths := []string {
         "/auth",
         "/auth/query",
@@ -37,4 +40,24 @@ func LoggedIn(c *fiber.Ctx) error {
 
     if loggedIn { return c.Next() }
     return HTMXRedirect(c, "/auth")
+}
+
+func IsAdmin(c *fiber.Ctx) error {
+    if !strings.Contains(c.Path(), "admin") {
+        return c.Next()
+    }
+
+    _, user := data.GetUserSession(c)
+
+    if user == nil {
+        return HTMXRedirect(c, "/auth")
+    }
+
+    admins := env.Admins()
+
+    if slices.Contains(admins, user.Username) {
+        return c.Next()
+    }
+
+    return HTMXRedirect(c, "/")
 }

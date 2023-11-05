@@ -17,7 +17,7 @@ func main() {
     app := fiber.New(fiber.Config{Views: html.New("./views", ".html") })
     app.Static("/", "./public")
 
-    app.Use(routes.LoggedIn, cors.New(cors.Config {
+    app.Use(routes.IsLoggedIn, routes.IsAdmin, cors.New(cors.Config {
         AllowCredentials: true,
         AllowOriginsFunc: func(origin string) bool {
             return !env.IsProd()
