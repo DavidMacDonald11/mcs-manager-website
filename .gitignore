@@ -2,5 +2,9 @@
 .air.toml
 tmp
 
-# Db
+# Dev files
 *.db
+.env
+
+# Generated files
+*_templ.go
