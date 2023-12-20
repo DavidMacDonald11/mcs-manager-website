@@ -4,13 +4,15 @@ import (
 	"log"
 
 	"github.com/davidmacdonald11/mcsm/cmd/env"
+	"github.com/davidmacdonald11/mcsm/model"
 	"github.com/davidmacdonald11/mcsm/route"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
-    app := echo.New()
+	model.MustConnectToDb()
 
+    app := echo.New()
 	app.Static("/", "./public")
 
 	route.SetupRoutes(app)

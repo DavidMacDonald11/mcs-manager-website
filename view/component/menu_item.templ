@@ -1,0 +1,9 @@
+package component
+
+templ MenuItem(isActive bool, href, text string) {
+	if isActive {
+		<a class="active item" href={ templ.URL(href) }>{ text }</a>
+	} else {
+		<a class="ui item" href={ templ.URL(href) }>{ text }</a>
+	}
+}

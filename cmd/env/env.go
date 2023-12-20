@@ -20,3 +20,7 @@ func IsProd() bool {
 func Port() string {
     return ":" + Get("PORT")
 }
+
+func DbPath() string {
+	return Get("DB_PATH")
+}

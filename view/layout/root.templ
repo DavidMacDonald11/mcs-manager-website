@@ -1,7 +1,18 @@
 package layout
 
-templ Root() {
+import "github.com/davidmacdonald11/mcsm/view/component"
+
+templ Root(page int) {
 	@Base() {
-		<h1>This is the main page</h1>
+		<div class="ui secondary pointing menu">
+			@component.MenuItem(page == 0, "/status", "Status")
+			@component.MenuItem(page == 1, "/info", "Info")
+			<div class="right menu">
+				<a class="ui item">Logout</a>
+			</div>
+		</div>
+		<div class="ui segment">
+			{ children... }
+		</div>
 	}
 }
