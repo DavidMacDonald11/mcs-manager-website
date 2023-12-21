@@ -1,0 +1,47 @@
+package layout
+
+templ Auth(err string) {
+	@Base() {
+		<div id="auth-form">
+			<div class="ui middle aligned center grid">
+				<div class="column">
+					<h2 class="ui image header">
+						<div class="content">Enter Your Minecraft Username</div>
+					</h2>
+					<form
+ 						class="ui large form htmx-form"
+ 						hx-post="/auth/query"
+ 						hx-target="#auth-form"
+ 						hx-swap="innerHTML"
+ 						hx-trigger="submit"
+					>
+						<div class="field">
+							<div class="ui left icon input">
+								<i class="user icon"></i>
+								<input
+ 									type="text"
+ 									name="username"
+ 									placeholder="Minecraft Username"
+ 									autofocus
+								/>
+							</div>
+						</div>
+						<input
+ 							class="ui fluid large green submit button"
+ 							type="submit"
+ 							value="Next"
+						/>
+					</form>
+					if err != "" {
+						<div id="error-message">
+							<div class="ui bottom attached error message">
+								<i class="exclamation icon"></i>
+								{ err }
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	}
+}

@@ -1,4 +1,4 @@
-.PHONY: run build
+.PHONY: air run build
 
 air: build
 	@go build -o ./tmp/main cmd/main.go

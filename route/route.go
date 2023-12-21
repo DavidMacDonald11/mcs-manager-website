@@ -12,6 +12,8 @@ func SetupRoutes(app *echo.Echo) {
 	app.GET("/status", getStatus)
 	app.GET("/info", getInfo)
 	app.POST("/create-invite-code", postCreateInviteCode)
+
+	SetupAuthRoutes(app)
 }
 
 func getRoot(c echo.Context) error {
@@ -27,7 +29,7 @@ func getInfo(c echo.Context) error {
 }
 
 func postCreateInviteCode(c echo.Context) error {
-	code := model.CreateInviteCode()
+	code := model.CreateInviteCode(0)
 
 	if code == nil {
 		return c.String(echo.ErrInternalServerError.Code, "Error")

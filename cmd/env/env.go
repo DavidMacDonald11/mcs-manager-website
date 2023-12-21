@@ -24,3 +24,11 @@ func Port() string {
 func DbPath() string {
 	return Get("DB_PATH")
 }
+
+func SessionKey() string {
+	return Get("SESSION_KEY")
+}
+
+func AccessControlOrigin() []string {
+	return []string{Get("ACCESS_CONTROL_ORIGIN")}
+}

@@ -11,11 +11,13 @@ import (
 
 var Db *gorm.DB
 
+type idType = uint64
+
 func MustConnectToDb() {
 	db, err := gorm.Open(sqlite.Open(env.DbPath()), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Failed to connect to the databaso\n", err.Error())
+		log.Fatal("Failed to connect to the database\n", err.Error())
 	}
 
 	log.Println("Connected to the database")

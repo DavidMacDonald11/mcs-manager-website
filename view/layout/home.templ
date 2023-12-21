@@ -2,7 +2,7 @@ package layout
 
 import "github.com/davidmacdonald11/mcsm/view/component"
 
-templ Root(page int) {
+templ Home(page int) {
 	@Base() {
 		<div class="ui secondary pointing menu">
 			@component.MenuItem(page == 0, "/status", "Status")
