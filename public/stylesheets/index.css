@@ -16,3 +16,8 @@
 #server {
 	color: grey;
 }
+
+#invite-code {
+	resize: none;
+	text-align: center;
+}

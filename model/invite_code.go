@@ -6,8 +6,10 @@ import (
 	"time"
 )
 
+type idType = uint64
+
 type InviteCode struct {
-	ID        uint64 `gorm:"primaryKey"`
+	ID        idType `gorm:"primaryKey"`
 	Code      string
 	ExpiresAt time.Time
 }
@@ -21,7 +23,7 @@ func CreateInviteCode() *InviteCode {
 	}
 
 	code := base64.URLEncoding.EncodeToString(bytes)
-	expiresAt := time.Now().Add(24 * time.Hour)
+	expiresAt := time.Now().Add(48 * time.Hour)
 
 	c := &InviteCode{Code: code, ExpiresAt: expiresAt}
 	Db.Create(c)
@@ -33,20 +35,32 @@ func CreateInviteCode() *InviteCode {
 	return c
 }
 
-func VerifyInviteCode(code string) int {
+func VerifyInviteCode(code string) bool {
+	deleteExpiredCodes()
+
 	c := new(InviteCode)
 	Db.First(c, "Code = ?", code)
 
 	if c.ID == 0 {
-		return -1
+		return false
 	}
 
-	expired := c.ExpiresAt.Before(time.Now())
 	Db.Delete(c)
+	return true
+}
 
-	if expired {
-		return 1
+func deleteExpiredCodes() {
+	var codes []InviteCode
+	var ids []idType
+	Db.Find(&codes)
+
+	for _, code := range codes {
+		if code.ExpiresAt.Before(time.Now()) {
+			ids = append(ids, code.ID)
+		}
 	}
 
-	return 0
+	if len(ids) > 0 {
+		Db.Delete(&codes, ids)
+	}
 }

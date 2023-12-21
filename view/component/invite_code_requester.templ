@@ -1,0 +1,19 @@
+package component
+
+templ InviteCodeRequester() {
+	<button
+ 		class="ui blue button"
+ 		hx-post="/create-invite-code"
+ 		hx-target="#invite-code"
+ 		hx-swap="innerHTML"
+ 		hx-on::before-request="buttonBefore(this)"
+ 		hx-on::after-request="buttonAfter(this)"
+	>Generate Invite Code</button>
+	<textarea
+ 		id="invite-code"
+ 		rows="1"
+ 		cols="48"
+ 		onClick="this.select()"
+ 		readonly
+	></textarea>
+}

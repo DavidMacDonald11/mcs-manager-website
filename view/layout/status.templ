@@ -1,5 +1,7 @@
 package layout
 
+import "github.com/davidmacdonald11/mcsm/view/component"
+
 templ Status() {
 	@Root(0) {
 		<h2>Server Status</h2>
@@ -8,6 +10,7 @@ templ Status() {
 			<i id="laptop" class="large laptop icon"></i>
 			<i id="server" class="large gamepad icon"></i>
 		</div>
+		@component.InviteCodeRequester()
 		<hr/>
 	}
 }
