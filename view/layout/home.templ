@@ -4,11 +4,16 @@ import "github.com/davidmacdonald11/mcsm/view/component"
 
 templ Home(page int) {
 	@Base() {
-		<div class="ui secondary pointing menu">
+		<div class="ui secondary  menu">
 			@component.MenuItem(page == 0, "/status", "Status")
 			@component.MenuItem(page == 1, "/info", "Info")
 			<div class="right menu">
-				<a class="ui item">Logout</a>
+				<button
+ 					class="ui button item"
+ 					hx-post="/auth/logout"
+ 					hx-on::before-request="buttonBefore(this)"
+ 					hx-on::after-request="buttonAfter(this)"
+				>Logout</button>
 			</div>
 		</div>
 		<div class="ui segment">

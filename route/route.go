@@ -29,7 +29,13 @@ func getInfo(c echo.Context) error {
 }
 
 func postCreateInviteCode(c echo.Context) error {
-	code := model.CreateInviteCode(0)
+	_, user := model.GetUserSession(c)
+
+	if user == nil {
+		return c.String(echo.ErrInternalServerError.Code, "Session Error")
+	}
+
+	code := model.CreateInviteCode(user.Id)
 
 	if code == nil {
 		return c.String(echo.ErrInternalServerError.Code, "Error")

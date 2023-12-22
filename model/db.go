@@ -11,7 +11,7 @@ import (
 
 var Db *gorm.DB
 
-type idType = uint64
+type IdType = uint64
 
 func MustConnectToDb() {
 	db, err := gorm.Open(sqlite.Open(env.DbPath()), &gorm.Config{})
@@ -29,7 +29,7 @@ func MustConnectToDb() {
 	}
 
 	log.Println("Running migrations")
-	db.AutoMigrate(&InviteCode{})
+	db.AutoMigrate(&InviteCode{}, &User{})
 
 	Db = db
 }

@@ -46,7 +46,7 @@ func GetUserSession(c echo.Context) (*sessions.Session, *User) {
 		return sess, nil
 	}
 
-	id := sess.Values[USER_ID].(idType)
+	id := sess.Values[USER_ID].(IdType)
 	user := FindUserById(id)
 
 	return sess, user

@@ -2,16 +2,16 @@ package layout
 
 import "github.com/davidmacdonald11/mcsm/view/component"
 
-templ Auth(username, err string) {
+templ Login(username, err string) {
 	@Base() {
 		@component.AuthForm(err, component.AuthFormConfig{
-			Header: "Enter Your Minecraft Username",
-			Route: "/auth/query",
+			Header: "Login",
+			Route: "/auth/login",
 			Username: username,
-			ShowPassword: false,
+			ShowPassword: true,
 			ShowInviteCode: false,
-			AutoFocus: "username",
-			SubmitText: "Next",
+			AutoFocus: "password",
+			SubmitText: "Login",
 		})
 	}
 }

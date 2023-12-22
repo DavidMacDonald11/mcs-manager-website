@@ -32,3 +32,7 @@ func SessionKey() string {
 func AccessControlOrigin() []string {
 	return []string{Get("ACCESS_CONTROL_ORIGIN")}
 }
+
+func BootstrapInviteCode() string {
+	return Get("BOOTSTRAP_INVITE_CODE")
+}

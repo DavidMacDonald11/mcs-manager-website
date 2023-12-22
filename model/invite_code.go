@@ -4,16 +4,18 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"time"
+
+	"github.com/davidmacdonald11/mcsm/cmd/env"
 )
 
 type InviteCode struct {
-	Id        idType `gorm:"primaryKey"`
+	Id        IdType `gorm:"primaryKey"`
 	Code      string
-	CreatedBy idType
+	CreatedBy IdType
 	ExpiresAt time.Time
 }
 
-func CreateInviteCode(createdBy idType) *InviteCode {
+func CreateInviteCode(createdBy IdType) *InviteCode {
 	bytes := make([]byte, 32)
 	_, err := rand.Read(bytes)
 
@@ -34,13 +36,19 @@ func CreateInviteCode(createdBy idType) *InviteCode {
 	return c
 }
 
-func VerifyInviteCode(code string) (createdBy idType) {
+func VerifyInviteCode(code string) (createdBy IdType) {
 	deleteExpiredCodes()
 
 	c := new(InviteCode)
 	Db.First(c, "Code = ?", code)
 
 	if c.Id == 0 {
+		c.Code = env.BootstrapInviteCode()
+
+		if len(FindAllUsers()) == 0 && c.Code != "" && code == c.Code {
+			return 1
+		}
+
 		return 0
 	}
 
@@ -51,7 +59,7 @@ func VerifyInviteCode(code string) (createdBy idType) {
 
 func deleteExpiredCodes() {
 	var codes []InviteCode
-	var ids []idType
+	var ids []IdType
 	Db.Find(&codes)
 
 	for _, code := range codes {

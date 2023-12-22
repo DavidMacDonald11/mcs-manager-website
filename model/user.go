@@ -8,10 +8,10 @@ import (
 )
 
 type User struct {
-	Id        idType `gorm:"primaryKey"`
+	Id        IdType `gorm:"primaryKey"`
 	Username  string `gorm:"unique"`
 	Hash      string
-	InvitedBy idType
+	InvitedBy IdType
 	CreatedAt time.Time
 	LastLogin time.Time
 }
@@ -21,7 +21,7 @@ func (u User) VerifyPassword(password string) bool {
 	return err == nil
 }
 
-func (u User) CreateSession(c echo.Context) bool {
+func (u *User) CreateSession(c echo.Context) bool {
 	sess, err := GetSession(c)
 
 	if err != nil {
@@ -32,6 +32,7 @@ func (u User) CreateSession(c echo.Context) bool {
 	sess.Values[USER_ID] = u.Id
 	err = sess.Save(c.Request(), c.Response())
 
+	u.LastLogin = time.Now()
 	return err == nil
 }
 
@@ -57,7 +58,7 @@ func FindUser(username string) *User {
 	return user
 }
 
-func FindUserById(id idType) *User {
+func FindUserById(id IdType) *User {
 	user := new(User)
 	Db.First(user, id)
 
@@ -68,8 +69,21 @@ func FindUserById(id idType) *User {
 	return user
 }
 
-func CreateUser(username, hash string, invitedBy idType) *User {
-	user := &User{Username: username, Hash: hash, InvitedBy: invitedBy}
+func CreateUser(username, password string, invitedBy IdType) *User {
+	h, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	hash := string(h)
+
+	if err != nil {
+		return nil
+	}
+
+	user := &User{
+		Username:  username,
+		Hash:      hash,
+		InvitedBy: invitedBy,
+		CreatedAt: time.Now(),
+	}
+
 	Db.Create(user)
 
 	if user.Id == 0 {
