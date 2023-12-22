@@ -11,8 +11,8 @@ type AuthFormConfig struct {
 }
 
 templ AuthForm(err string, conf AuthFormConfig) {
-	<div id="auth-form">
-		<div class="ui middle aligned center grid">
+	<div class="ui card" id="auth-form">
+		<div class="ui middle aligned center grid content">
 			<div class="column">
 				<h2 class="ui image header">
 					<div class="content">{ conf.Header }</div>
@@ -21,7 +21,7 @@ templ AuthForm(err string, conf AuthFormConfig) {
  					class="ui large form htmx-form"
  					hx-post={ conf.Route }
  					hx-target="#auth-form"
- 					hx-swap="innerHTML"
+ 					hx-swap="outerHTML"
  					hx-trigger="submit"
  					hx-on::before-request="formBefore(this)"
  					hx-on::after-request="formAfter(this)"
@@ -76,12 +76,13 @@ templ AuthForm(err string, conf AuthFormConfig) {
 					>{ conf.SubmitText }</button>
 				</form>
 				if err != "" {
-					<div id="error-message">
-						<div class="ui bottom attached error message">
+					<div id="error-message" class="invisible">
+						<div class="ui bottom error message">
 							<i class="exclamation icon"></i>
 							{ err }
 						</div>
 					</div>
+					<script>fadeInError()</script>
 				}
 			</div>
 		</div>

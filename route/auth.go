@@ -3,9 +3,14 @@ package route
 import (
 	"github.com/davidmacdonald11/mcsm/cmd/form"
 	"github.com/davidmacdonald11/mcsm/model"
+	"github.com/davidmacdonald11/mcsm/view/component"
 	"github.com/davidmacdonald11/mcsm/view/layout"
 	"github.com/labstack/echo/v4"
 )
+
+var authQueryForm = component.AuthQueryForm
+var signupForm = component.SignupForm
+var loginForm = component.LoginForm
 
 func SetupAuthRoutes(app *echo.Echo) {
 	app.GET("/auth", getAuth)
@@ -24,14 +29,14 @@ func postAuthQuery(c echo.Context) error {
 	err := form.VerifyUsername(username)
 
 	if err != "" {
-		return render(c, layout.Auth(username, err))
+		return render(c, authQueryForm(username, err))
 	}
 
 	if model.FindUser(username) == nil {
-		return render(c, layout.Signup(username, ""))
+		return render(c, signupForm(username, ""))
 	}
 
-	return render(c, layout.Login(username, ""))
+	return render(c, loginForm(username, ""))
 }
 
 func postAuthLogin(c echo.Context) error {
@@ -40,21 +45,21 @@ func postAuthLogin(c echo.Context) error {
 	err := form.VerifyLogin(username, password)
 
 	if err != "" {
-		return render(c, layout.Login(username, err))
+		return render(c, loginForm(username, err))
 	}
 
 	user := model.FindUser(username)
 
 	if user == nil {
-		return render(c, layout.Signup(username, "User not found"))
+		return render(c, signupForm(username, "User not found"))
 	}
 
 	if !user.VerifyPassword(password) {
-		return render(c, layout.Login(username, "Invalid credentials"))
+		return render(c, loginForm(username, "Invalid credentials"))
 	}
 
 	if !user.CreateSession(c) {
-		return render(c, layout.Login(username, "Internal server error"))
+		return render(c, loginForm(username, "Internal server error"))
 	}
 
 	return redirect(c, "/")
@@ -67,23 +72,23 @@ func postAuthSignup(c echo.Context) error {
 	err := form.VerifySignup(username, password, code)
 
 	if err != "" {
-		return render(c, layout.Signup(username, err))
+		return render(c, signupForm(username, err))
 	}
 
 	invitedBy := model.VerifyInviteCode(code)
 
 	if invitedBy == 0 {
-		return render(c, layout.Signup(username, "Invite Code is invalid"))
+		return render(c, signupForm(username, "Invite Code is invalid"))
 	}
 
 	user := model.CreateUser(username, password, invitedBy)
 
 	if user == nil {
-		return render(c, layout.Signup(username, "Internal server error"))
+		return render(c, signupForm(username, "Internal server error"))
 	}
 
 	if !user.CreateSession(c) {
-		return render(c, layout.Login(username, "Internal server error"))
+		return render(c, loginForm(username, "Internal server error"))
 	}
 
 	return redirect(c, "/")

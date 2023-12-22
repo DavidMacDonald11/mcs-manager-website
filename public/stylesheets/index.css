@@ -2,12 +2,18 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-    background-color: #f9f9f9;
+	background-color: #f9f9f9;
+	height: 100%;
+	padding-top: 5%;
 }
 
 .status-container {
 	display: flex;
 	align-items: center;
+}
+
+.invisible {
+	display: none;
 }
 
 #laptop {
@@ -21,4 +27,8 @@
 #invite-code {
 	resize: none;
 	text-align: center;
+}
+
+#error-message {
+	margin-top: 4%;
 }

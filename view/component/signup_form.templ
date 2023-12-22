@@ -1,0 +1,13 @@
+package component
+
+templ SignupForm(username, err string) {
+	@AuthForm(err, AuthFormConfig{
+		Header: "Signup",
+		Route: "/auth/signup",
+		Username: username,
+		ShowPassword: true,
+		ShowInviteCode: true,
+		AutoFocus: "password",
+		SubmitText: "Signup",
+	})
+}

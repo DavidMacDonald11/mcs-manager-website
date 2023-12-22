@@ -1,8 +1,10 @@
 package model
 
 import (
+	"net/http"
 	"time"
 
+	"github.com/davidmacdonald11/mcsm/cmd/env"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -30,9 +32,12 @@ func (u *User) CreateSession(c echo.Context) bool {
 
 	sess.Values[AUTH_KEY] = true
 	sess.Values[USER_ID] = u.Id
-	err = sess.Save(c.Request(), c.Response())
+	sess.Options.SameSite = http.SameSite(http.SameSiteStrictMode)
+	sess.Options.Secure = env.IsProd()
 
-	u.LastLogin = time.Now()
+	err = sess.Save(c.Request(), c.Response())
+	Db.Model(u).Update("last_login", time.Now())
+
 	return err == nil
 }
 
@@ -42,6 +47,10 @@ func EndSession(c echo.Context) bool {
 	if err != nil {
 		return true
 	}
+
+	sess.Options.SameSite = http.SameSite(http.SameSiteStrictMode)
+	sess.Options.Secure = env.IsProd()
+	sess.Save(c.Request(), c.Response())
 
 	err = Store.Delete(c.Request(), c.Response(), sess)
 	return err == nil

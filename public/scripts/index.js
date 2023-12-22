@@ -17,3 +17,7 @@ function formAfter(form) {
 	let button = form.querySelector("button.submit")
 	buttonAfter(button)
 }
+
+function fadeInError() {
+	$("#error-message").transition("fade in")
+}

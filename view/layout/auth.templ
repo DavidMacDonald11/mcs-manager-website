@@ -4,14 +4,6 @@ import "github.com/davidmacdonald11/mcsm/view/component"
 
 templ Auth(username, err string) {
 	@Base() {
-		@component.AuthForm(err, component.AuthFormConfig{
-			Header: "Enter Your Minecraft Username",
-			Route: "/auth/query",
-			Username: username,
-			ShowPassword: false,
-			ShowInviteCode: false,
-			AutoFocus: "username",
-			SubmitText: "Next",
-		})
+		@component.AuthQueryForm(username, err)
 	}
 }

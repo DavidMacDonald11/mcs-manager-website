@@ -1,0 +1,13 @@
+package component
+
+templ LoginForm(username, err string) {
+	@AuthForm(err, AuthFormConfig{
+		Header: "Login",
+		Route: "/auth/login",
+		Username: username,
+		ShowPassword: true,
+		ShowInviteCode: false,
+		AutoFocus: "password",
+		SubmitText: "Login",
+	})
+}

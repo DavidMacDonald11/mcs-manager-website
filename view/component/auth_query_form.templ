@@ -1,0 +1,13 @@
+package component
+
+templ AuthQueryForm(username, err string) {
+	@AuthForm(err, AuthFormConfig{
+		Header: "Enter Your Minecraft Username",
+		Route: "/auth/query",
+		Username: username,
+		ShowPassword: false,
+		ShowInviteCode: false,
+		AutoFocus: "username",
+		SubmitText: "Next",
+	})
+}
