@@ -78,7 +78,7 @@ func postAuthSignup(c echo.Context) error {
 	invitedBy := model.VerifyInviteCode(code)
 
 	if invitedBy == 0 {
-		return render(c, signupForm(username, "Invite Code is invalid"))
+		return render(c, signupForm(username, "Invite code is invalid"))
 	}
 
 	user := model.CreateUser(username, password, invitedBy)

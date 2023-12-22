@@ -1,6 +1,8 @@
 package route
 
 import (
+	"net/http"
+
 	"github.com/a-h/templ"
 	"github.com/davidmacdonald11/mcsm/model"
 	"github.com/davidmacdonald11/mcsm/view/layout"
@@ -56,5 +58,5 @@ func redirect(c echo.Context, route string) error {
 		return nil
 	}
 
-	return c.Redirect(301, route)
+	return c.Redirect(http.StatusSeeOther, route)
 }
