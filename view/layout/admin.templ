@@ -1,0 +1,28 @@
+package layout
+
+import "github.com/davidmacdonald11/mcsm/model"
+import "github.com/davidmacdonald11/mcsm/view/component"
+
+templ Admin(isAdmin bool, users []model.User) {
+	@Home(2, isAdmin) {
+		<h1>Admin</h1>
+		<table class="ui compact celled table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Username</th>
+					<th>Joined At</th>
+					<th>Invited By</th>
+					<th>Last Login</th>
+					<th>Codes Created</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, user := range users {
+					@component.User(user)
+				}
+			</tbody>
+		</table>
+	}
+}

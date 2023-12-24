@@ -4,6 +4,8 @@ import "github.com/davidmacdonald11/mcsm/view/component"
 
 templ Auth(username, err string) {
 	@Base() {
-		@component.AuthQueryForm(username, err)
+		<div class="ui centered grid container">
+			@component.AuthQueryForm(username, err)
+		</div>
 	}
 }

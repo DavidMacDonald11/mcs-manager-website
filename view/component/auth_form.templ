@@ -11,80 +11,76 @@ type AuthFormConfig struct {
 }
 
 templ AuthForm(err string, conf AuthFormConfig) {
-	<div class="ui card" id="auth-form">
-		<div class="ui middle aligned center grid content">
-			<div class="column">
-				<h2 class="ui image header">
-					<div class="content">{ conf.Header }</div>
-				</h2>
-				<form
- 					class="ui large form htmx-form"
- 					hx-post={ conf.Route }
- 					hx-target="#auth-form"
- 					hx-swap="outerHTML"
- 					hx-trigger="submit"
- 					hx-on::before-request="formBefore(this)"
- 					hx-on::after-request="formAfter(this)"
-				>
-					<div class="field">
-						<div class="ui left icon input">
-							<i class="user icon"></i>
-							<input
- 								type="text"
- 								name="username"
- 								placeholder="Minecraft Username"
- 								value={ conf.Username }
- 								if conf.AutoFocus == "username" {
-									autofocus
-								}
-							/>
-						</div>
-					</div>
-					if conf.ShowPassword {
-						<div class="field">
-							<div class="ui left icon input">
-								<i class="lock icon"></i>
-								<input
- 									type="password"
- 									name="password"
- 									placeholder="Password"
- 									if conf.AutoFocus == "password" {
-										autofocus
-									}
-								/>
-							</div>
-						</div>
-					}
-					if conf.ShowInviteCode {
-						<div class="field">
-							<div class="ui left icon input">
-								<i class="code icon"></i>
-								<input
- 									type="text"
- 									name="invite-code"
- 									placeholder="Invite Code"
- 									if conf.AutoFocus == "invite-code" {
-										autofocus
-									}
-								/>
-							</div>
-						</div>
-					}
-					<button
- 						class="ui fluid large green submit button"
- 						type="submit"
-					>{ conf.SubmitText }</button>
-				</form>
-				if err != "" {
-					<div id="error-message" class="invisible">
-						<div class="ui bottom error message">
-							<i class="exclamation icon"></i>
-							{ err }
-						</div>
-					</div>
-					<script>fadeInError()</script>
-				}
+	<div class="ui segment" id="auth-form">
+		<h2 class="ui image header">
+			<div class="content">{ conf.Header }</div>
+		</h2>
+		<form
+ 			class="ui large form htmx-form"
+ 			hx-post={ conf.Route }
+ 			hx-target="#auth-form"
+ 			hx-swap="outerHTML"
+ 			hx-trigger="submit"
+ 			hx-on::before-request="formBefore(this)"
+ 			hx-on::after-request="formAfter(this)"
+		>
+			<div class="field">
+				<div class="ui left icon input">
+					<i class="user icon"></i>
+					<input
+ 						type="text"
+ 						name="username"
+ 						placeholder="Minecraft Username"
+ 						value={ conf.Username }
+ 						if conf.AutoFocus == "username" {
+							autofocus
+						}
+					/>
+				</div>
 			</div>
-		</div>
+			if conf.ShowPassword {
+				<div class="field">
+					<div class="ui left icon input">
+						<i class="lock icon"></i>
+						<input
+ 							type="password"
+ 							name="password"
+ 							placeholder="Password"
+ 							if conf.AutoFocus == "password" {
+								autofocus
+							}
+						/>
+					</div>
+				</div>
+			}
+			if conf.ShowInviteCode {
+				<div class="field">
+					<div class="ui left icon input">
+						<i class="code icon"></i>
+						<input
+ 							type="text"
+ 							name="invite-code"
+ 							placeholder="Invite Code"
+ 							if conf.AutoFocus == "invite-code" {
+								autofocus
+							}
+						/>
+					</div>
+				</div>
+			}
+			<button
+ 				class="ui fluid large green submit button"
+ 				type="submit"
+			>{ conf.SubmitText }</button>
+		</form>
+		if err != "" {
+			<div id="error-message" class="invisible">
+				<div class="ui bottom error message">
+					<i class="exclamation icon"></i>
+					{ err }
+				</div>
+			</div>
+			<script>fadeInError()</script>
+		}
 	</div>
 }

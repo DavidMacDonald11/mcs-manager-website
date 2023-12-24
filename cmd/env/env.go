@@ -36,3 +36,7 @@ func AccessControlOrigin() []string {
 func BootstrapInviteCode() string {
 	return Get("BOOTSTRAP_INVITE_CODE")
 }
+
+func Admin() string {
+	return Get("ADMIN")
+}

@@ -1,6 +1,9 @@
 package route
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/davidmacdonald11/mcsm/cmd/form"
 	"github.com/davidmacdonald11/mcsm/model"
 	"github.com/davidmacdonald11/mcsm/view/component"
@@ -18,6 +21,7 @@ func SetupAuthRoutes(app *echo.Echo) {
 	app.POST("/auth/login", postAuthLogin)
 	app.POST("/auth/signup", postAuthSignup)
 	app.POST("/auth/logout", postAuthLogout)
+	app.DELETE("/auth/delete/:id", deleteAuthDelete)
 }
 
 func getAuth(c echo.Context) error {
@@ -58,7 +62,7 @@ func postAuthLogin(c echo.Context) error {
 		return render(c, loginForm(username, "Invalid credentials"))
 	}
 
-	if !user.CreateSession(c) {
+	if !model.CreateSession(c, user) {
 		return render(c, loginForm(username, "Internal server error"))
 	}
 
@@ -87,7 +91,7 @@ func postAuthSignup(c echo.Context) error {
 		return render(c, signupForm(username, "Internal server error"))
 	}
 
-	if !user.CreateSession(c) {
+	if !model.CreateSession(c, user) {
 		return render(c, loginForm(username, "Internal server error"))
 	}
 
@@ -97,4 +101,21 @@ func postAuthSignup(c echo.Context) error {
 func postAuthLogout(c echo.Context) error {
 	model.EndSession(c)
 	return redirect(c, "/")
+}
+
+func deleteAuthDelete(c echo.Context) error {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Bad request")
+	}
+
+	user := model.FindUserById(id)
+
+	if user == nil {
+		return c.String(http.StatusBadRequest, "Bad request")
+	}
+
+	user.Delete()
+	return c.String(200, "")
 }

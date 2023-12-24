@@ -30,7 +30,7 @@ func main() {
 	}))
 
 	app.Use(session.Middleware(model.Store))
-	app.Use(route.IsLoggedIn)
+	app.Use(route.IsLoggedIn, route.IsAdmin)
 
 	route.SetupRoutes(app)
 

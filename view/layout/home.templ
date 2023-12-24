@@ -2,22 +2,30 @@ package layout
 
 import "github.com/davidmacdonald11/mcsm/view/component"
 
-templ Home(page int) {
+templ Home(page int, isAdmin bool) {
 	@Base() {
-		<div class="ui secondary  menu">
-			@component.MenuItem(page == 0, "/status", "Status")
-			@component.MenuItem(page == 1, "/info", "Info")
-			<div class="right menu">
-				<button
- 					class="ui button item"
- 					hx-post="/auth/logout"
- 					hx-on::before-request="buttonBefore(this)"
- 					hx-on::after-request="buttonAfter(this)"
-				>Logout</button>
+		<div class="ui container">
+			<div class="ui pointing menu">
+				@component.MenuItem(page == 0, "/status", "Status")
+				@component.MenuItem(page == 1, "/info", "Info")
+				if isAdmin {
+					@component.MenuItem(page == 2, "/admin", "Admin")
+				}
+				<div class="right menu">
+					<div class="item">
+						@component.InviteCodeRequester()
+					</div>
+					<a
+ 						class="ui item"
+ 						hx-post="/auth/logout"
+ 						hx-on::before-request="buttonBefore(this)"
+ 						hx-on::after-request="buttonAfter(this)"
+					>Logout</a>
+				</div>
 			</div>
-		</div>
-		<div class="ui segment">
-			{ children... }
+			<div class="ui segment">
+				{ children... }
+			</div>
 		</div>
 	}
 }

@@ -13,6 +13,7 @@ func SetupRoutes(app *echo.Echo) {
 	app.GET("/", getRoot)
 	app.GET("/status", getStatus)
 	app.GET("/info", getInfo)
+	app.GET("/admin", getAdmin)
 	app.POST("/create-invite-code", postCreateInviteCode)
 
 	SetupAuthRoutes(app)
@@ -23,11 +24,34 @@ func getRoot(c echo.Context) error {
 }
 
 func getStatus(c echo.Context) error {
-	return render(c, layout.Status())
+	_, user := model.GetUserSession(c)
+
+	if user == nil {
+		return redirect(c, "/auth")
+	}
+
+	return render(c, layout.Status(user.IsAdmin()))
 }
 
 func getInfo(c echo.Context) error {
-	return render(c, layout.Info())
+	_, user := model.GetUserSession(c)
+
+	if user == nil {
+		return redirect(c, "/auth")
+	}
+
+	return render(c, layout.Info(user.IsAdmin()))
+}
+
+func getAdmin(c echo.Context) error {
+	_, user := model.GetUserSession(c)
+
+	if user == nil {
+		return redirect(c, "/auth")
+	}
+
+	users := model.FindAllUsers()
+	return render(c, layout.Admin(user.IsAdmin(), users))
 }
 
 func postCreateInviteCode(c echo.Context) error {

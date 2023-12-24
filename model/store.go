@@ -2,6 +2,8 @@ package model
 
 import (
 	"log"
+	"net/http"
+	"time"
 
 	"github.com/davidmacdonald11/mcsm/cmd/env"
 	"github.com/gorilla/sessions"
@@ -12,7 +14,7 @@ import (
 
 var (
 	AUTH_KEY = "authenticated"
-	USER_ID = "user_id"
+	USER_ID  = "user_id"
 )
 
 var Store *sqlitestore.SqliteStore
@@ -35,6 +37,24 @@ func MustCreateStore() {
 	log.Println("Created store")
 }
 
+func CreateSession(c echo.Context, u *User) bool {
+	sess, err := GetSession(c)
+
+	if err != nil {
+		return false
+	}
+
+	sess.Values[AUTH_KEY] = true
+	sess.Values[USER_ID] = u.Id
+	sess.Options.SameSite = http.SameSite(http.SameSiteStrictMode)
+	sess.Options.Secure = env.IsProd()
+
+	err = sess.Save(c.Request(), c.Response())
+	Db.Model(u).Update("last_login", time.Now())
+
+	return err == nil
+}
+
 func GetSession(c echo.Context) (*sessions.Session, error) {
 	return session.Get("session", c)
 }
@@ -42,7 +62,7 @@ func GetSession(c echo.Context) (*sessions.Session, error) {
 func GetUserSession(c echo.Context) (*sessions.Session, *User) {
 	sess, err := GetSession(c)
 
-	if err != nil {
+	if err != nil || sess.Values[USER_ID] == nil {
 		return sess, nil
 	}
 
@@ -50,4 +70,19 @@ func GetUserSession(c echo.Context) (*sessions.Session, *User) {
 	user := FindUserById(id)
 
 	return sess, user
+}
+
+func EndSession(c echo.Context) bool {
+	sess, err := GetSession(c)
+
+	if err != nil {
+		return true
+	}
+
+	sess.Options.SameSite = http.SameSite(http.SameSiteStrictMode)
+	sess.Options.Secure = env.IsProd()
+	sess.Save(c.Request(), c.Response())
+
+	err = Store.Delete(c.Request(), c.Response(), sess)
+	return err == nil
 }

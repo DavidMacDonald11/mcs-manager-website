@@ -1,11 +1,9 @@
 package model
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/davidmacdonald11/mcsm/cmd/env"
-	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,42 +21,18 @@ func (u User) VerifyPassword(password string) bool {
 	return err == nil
 }
 
-func (u *User) CreateSession(c echo.Context) bool {
-	sess, err := GetSession(c)
-
-	if err != nil {
-		return false
-	}
-
-	sess.Values[AUTH_KEY] = true
-	sess.Values[USER_ID] = u.Id
-	sess.Options.SameSite = http.SameSite(http.SameSiteStrictMode)
-	sess.Options.Secure = env.IsProd()
-
-	err = sess.Save(c.Request(), c.Response())
-	Db.Model(u).Update("last_login", time.Now())
-
-	return err == nil
+func (u User) IsAdmin() bool {
+	return u.Username == env.Admin()
 }
 
-func EndSession(c echo.Context) bool {
-	sess, err := GetSession(c)
-
-	if err != nil {
-		return true
-	}
-
-	sess.Options.SameSite = http.SameSite(http.SameSiteStrictMode)
-	sess.Options.Secure = env.IsProd()
-	sess.Save(c.Request(), c.Response())
-
-	err = Store.Delete(c.Request(), c.Response(), sess)
-	return err == nil
+func (u User) Delete() {
+	Db.Where("created_by = ?", u.Id).Delete(&[]InviteCode{})
+	Db.Delete(&u)
 }
 
 func FindUser(username string) *User {
 	user := new(User)
-	Db.First(user, "Username = ?", username)
+	Db.First(user, "username = ?", username)
 
 	if user.Id == 0 {
 		return nil

@@ -1,0 +1,35 @@
+package component
+
+import "github.com/davidmacdonald11/mcsm/model"
+import "fmt"
+import "time"
+
+func targetId(user model.User) string {
+	return fmt.Sprintf("user-row-%d", user.Id)
+}
+
+func formatTime(t time.Time) string {
+	return t.Format("1/2/2006 at 3:04PM UTCMST")
+}
+
+templ User(user model.User) {
+	<tr id={ targetId(user) }>
+		<td>{ fmt.Sprintf("%d", user.Id) }</td>
+		<td>{ user.Username }</td>
+		<td>{ formatTime(user.CreatedAt) }</td>
+		<td>{ fmt.Sprintf("ID %d", user.InvitedBy) }</td>
+		<td>{ formatTime(user.LastLogin)}</td>
+		<td>{ fmt.Sprintf("%d", len(user.FindAllCreatedCodes())) }</td>
+		<td>
+			if !user.IsAdmin() {
+				<i
+ 					class="delete icon"
+ 					hx-delete={ fmt.Sprintf("/auth/delete/%d", user.Id) }
+ 					hx-target={ "#" + targetId(user) }
+ 					hx-swap="delete"
+ 					hx-trigger="click"
+				></i>
+			}
+		</td>
+	</tr>
+}

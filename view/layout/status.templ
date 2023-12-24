@@ -1,16 +1,16 @@
 package layout
 
-import "github.com/davidmacdonald11/mcsm/view/component"
-
-templ Status() {
-	@Home(0) {
-		<h2>Server Status</h2>
-		<div class="status-container">
-			<button class="green ui button">Launch!</button>
-			<i id="laptop" class="large laptop icon"></i>
-			<i id="server" class="large gamepad icon"></i>
+templ Status(isAdmin bool) {
+	@Home(0, isAdmin) {
+		<div class="ui two column very relaxed divided grid">
+			<div class="column">
+				<button class="green ui button">Launch!</button>
+				<i id="laptop" class="large laptop icon"></i>
+				<i id="server" class="large gamepad icon"></i>
+			</div>
+			<div class="column">
+				<h2>Server Status</h2>
+			</div>
 		</div>
-		@component.InviteCodeRequester()
-		<hr/>
 	}
 }
