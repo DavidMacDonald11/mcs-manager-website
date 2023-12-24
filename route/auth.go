@@ -112,7 +112,7 @@ func deleteAuthDelete(c echo.Context) error {
 
 	user := model.FindUserById(id)
 
-	if user == nil {
+	if user == nil || user.IsAdmin() {
 		return c.String(http.StatusBadRequest, "Bad request")
 	}
 
